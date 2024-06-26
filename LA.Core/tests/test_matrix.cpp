@@ -64,3 +64,23 @@ TEST_F(MatrixTest, MatrixSize) {
 	// Assert the size
 	ASSERT_EQ(dmat.size(), expected_size);
 }
+
+// Test for Matrix Unity
+TEST_F(MatrixTest, UnitMatrix) {
+	// Setup the matrices for the test
+	dmat = LA::Core::Matrix<double>::unit(2);
+	LA::Core::Matrix<double> expected{{1.0, 0.0}, {0.0, 1.0}};
+
+	// Assert	
+	ASSERT_EQ(dmat, expected);
+}
+
+// Test for Matrix Zeros
+TEST_F(MatrixTest, ZerosMatrix) {
+	// Setup the matrices for the test
+	dmat = LA::Core::Matrix<double>::zeros(2, 2);
+	LA::Core::Matrix<double> expected{{0.0, 0.0}, {0.0, 0.0}};
+
+	// Assert	
+	ASSERT_EQ(dmat, expected);
+}

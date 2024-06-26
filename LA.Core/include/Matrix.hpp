@@ -24,6 +24,12 @@ namespace LA {
 			// Data
 			std::vector< std::vector<T> > getData() const;
 
+			// Unit 
+			static Matrix<T> unit(int n);
+
+			// Zeros
+			static Matrix<T> zeros(int n, int m);
+
 			// Matrix Operations
 			const std::vector<T>& operator[](int index) const;
 			std::vector<T>& operator[](int index);

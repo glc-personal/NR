@@ -1,62 +1,77 @@
 # Compiler
 CXX = g++
 
-# Compiler flags
-CXXFLAGS = -std=c++2a -stdlib=libc++ -I./LA.Core/include -I./LA.Utilities/include -I/usr/local/include -fvisibility=hidden
-LDFLAGS = -stdlib=libc++ -L/usr/local/lib -lgtest -lgtest_main -pthread -undefined dynamic_lookup
-#LDFLAGS = -stdlib=libc++ -L/usr/local/lib -lgtest -lgtest_main -pthread
-
 # Directories
-CORE_DIR = ./LA.Core
-CORE_SRC_DIR = $(CORE_DIR)/src
-CORE_INC_DIR = $(CORE_DIR)/include
-CORE_TEST_DIR = $(CORE_DIR)/tests
-UTILITIES_DIR = ./LA.Utilities
-UTILITIES_SRC_DIR = $(UTILITIES_DIR)/src
-UTILITIES_INC_DIR = $(UTILITIES_DIR)/include
+# LA.Core
+LA_CORE_DIR = ./LA.Core
+LA_CORE_SRC_DIR = $(LA_CORE_DIR)/src
+LA_CORE_INC_DIR = $(LA_CORE_DIR)/include
+LA_CORE_TEST_DIR = $(LA_CORE_DIR)/tests
+# LA.Utilities
+LA_UTILITIES_DIR = ./LA.Utilities
+LA_UTILITIES_SRC_DIR = $(LA_UTILITIES_DIR)/src
+LA_UTILITIES_INC_DIR = $(LA_UTILITIES_DIR)/include
+# LA.Solvers
+LA_SOLVERS_DIR = ./LA.Solvers
+LA_SOLVERS_SRC_DIR = $(LA_SOLVERS_DIR)/src
+LA_SOLVERS_INC_DIR = $(LA_SOLVERS_DIR)/include
+LA_SOLVERS_TEST_DIR = $(LA_SOLVERS_DIR)/tests
+# Build
 BUILD_DIR = ./build
 
+# Compiler flags
+CXXFLAGS = -std=c++2a -stdlib=libc++ -I./$(LA_CORE_INC_DIR) -I./$(LA_UTILITIES_INC_DIR) -I./$(LA_SOLVERS_INC_DIR) -I/usr/local/include
+LDFLAGS = -stdlib=libc++ -L/usr/local/lib -lgtest -lgtest_main -pthread -undefined dynamic_lookup
+
 # Source files
-CORE_SOURCES = $(wildcard $(CORE_SRC_DIR)/*.cpp)
-UTILITIES_SOURCES = $(wildcard $(UTILITIES_SRC_DIR)/*.cpp)
+LA_CORE_SOURCES = $(wildcard $(LA_CORE_SRC_DIR)/*.cpp)
+LA_UTILITIES_SOURCES = $(wildcard $(LA_UTILITIES_SRC_DIR)/*.cpp)
+LA_SOLVERS_SOURCES = $(wildcard $(LA_SOLVERS_SRC_DIR)/*.cpp)
 MAIN_SOURCE = main.cpp
-TEST_SOURCES = $(wildcard $(CORE_TEST_DIR)/*.cpp)
+LA_CORE_TEST_SOURCES = $(wildcard $(LA_CORE_TEST_DIR)/*.cpp)
+LA_SOLVERS_TEST_SOURCES = $(wildcard $(LA_SOLVERS_TEST_DIR)/*.cpp)
 
 # Object files
-CORE_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(CORE_SOURCES)))
-UTILITIES_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(UTILITIES_SOURCES)))
+LA_CORE_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(LA_CORE_SOURCES)))
+LA_UTILITIES_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(LA_UTILITIES_SOURCES)))
+LA_SOLVERS_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(LA_SOLVERS_SOURCES)))
 MAIN_OBJECT = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(MAIN_SOURCE)))
-TEST_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(TEST_SOURCES)))
+LA_CORE_TEST_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(LA_CORE_TEST_SOURCES)))
+LA_SOLVERS_TEST_OBJECTS = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(LA_SOLVERS_TEST_SOURCES)))
 
 # Executables
 EXEC = $(BUILD_DIR)/NR
-TEST_EXEC = $(BUILD_DIR)/LA_Core_Tests
+LA_TEST_EXEC = $(BUILD_DIR)/LA_Tests
 
 # Build all targets
-all: $(EXEC) $(TEST_EXEC)
+all: $(EXEC) $(LA_TEST_EXEC)
 
 # Link the main executable
-$(EXEC): $(CORE_OBJECTS) $(UTILITIES_OBJECTS) $(MAIN_OBJECT) | $(BUILD_DIR)
+$(EXEC): $(LA_CORE_OBJECTS) $(LA_UTILITIES_OBJECTS) $(LA_SOLVERS_OBJECTS) $(MAIN_OBJECT) | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # Link the test executable
-$(TEST_EXEC): $(TEST_OBJECTS) $(CORE_OBJECTS) $(UTILITIES_OBJECTS) | $(BUILD_DIR)
+$(LA_TEST_EXEC): $(LA_CORE_TEST_OBJECTS) $(LA_SOLVERS_TEST_OBJECTS) $(LA_CORE_OBJECTS) $(LA_UTILITIES_OBJECTS) $(LA_SOLVERS_OBJECTS) | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Compile main.cpp
 $(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Compile core sources
-$(BUILD_DIR)/%.o: $(CORE_SRC_DIR)/%.cpp | $(BUILD_DIR)
+# Compile LA.Core sources
+$(BUILD_DIR)/%.o: $(LA_CORE_SRC_DIR)/%.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Compile utilities sources
-$(BUILD_DIR)/%.o: $(UTILITIES_SRC_DIR)/%.cpp | $(BUILD_DIR)
+# Compile LA.Utilities sources
+$(BUILD_DIR)/%.o: $(LA_UTILITIES_SRC_DIR)/%.cpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Compile LA.Solvers sources
+$(BUILD_DIR)/%.o: $(LA_SOLVERS_SRC_DIR)/%.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Compile test sources
-$(BUILD_DIR)/%.o: $(CORE_TEST_DIR)/%.cpp | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(LA_CORE_TEST_DIR)/%.cpp $(LA_SOLVERS_TEST_DIR) | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Create build directory

@@ -86,6 +86,45 @@ namespace LA {
 
 		/*
 		* ---------------------------------------------------------------------------------------- 
+		* unit
+		*  Summary: Static method to obtain a unit Matrix of size n x n.
+		* ---------------------------------------------------------------------------------------- 
+		*/
+		template<typename T>
+		Matrix<T> Matrix<T>::unit(int n) {
+			Matrix<T> result(n, n);
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (i == j) {
+						result[i][j] = 1;
+					}
+					else {
+						result[i][j] = 0;
+					}
+				}
+			}
+			return result;
+		}
+
+		/*
+		* ---------------------------------------------------------------------------------------- 
+		* zeros
+		*  Summary: Static method to obtain a zero Matrix of size n x m.
+		* ---------------------------------------------------------------------------------------- 
+		*/
+		template<typename T>
+		Matrix<T> Matrix<T>::zeros(int n, int m) {
+			Matrix<T> result(n, m);
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < m; j++) {
+					result[i][j] = 0;
+				}
+			}
+			return result;
+		}
+
+		/*
+		* ---------------------------------------------------------------------------------------- 
 		* []
 		*  Summary: Obtain the ith row.
 		* ---------------------------------------------------------------------------------------- 

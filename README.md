@@ -10,7 +10,7 @@ The Core of the LA module includes a Matrix template class for integer, double,
 and complex Matrices.
 ### Solvers
 The Solvers of the LA module include the following:
-## Gauss-Jordan Elimination (GJE)
+#### Gauss-Jordan Elimination (GJE)
 GJE is for inverting a matrix, and is about as efficient as any other method. 
 It provides *both* the solution of the linear equations provided for one or 
 more right-hand side vectors *b*, and also the matrix inverse *A^-1*. It has
