@@ -1,10 +1,15 @@
-#### ReadMe
+# ReadMe
 
-### Summary
+## Summary
 The NR (Numerical Recipes) repo is based on the famous Numerical Recipes book.
 This is a personal implementation of selected peices for my own enjoyment.
 
-### Linear Algebra (LA) - Chapter 2
+## Linear Algebra (LA) - Chapter 2
+### Core
+The Core of the LA module includes a Matrix template class for integer, double, 
+and complex Matrices.
+### Solvers
+The Solvers of the LA module include the following:
 ## Gauss-Jordan Elimination (GJE)
 GJE is for inverting a matrix, and is about as efficient as any other method. 
 It provides *both* the solution of the linear equations provided for one or 
